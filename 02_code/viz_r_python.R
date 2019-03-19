@@ -14,7 +14,7 @@ library(helfRlein)
 library(VennDiagram)
 
 # Read data
-df_18 <- read_csv("~/multipleChoiceResponses.csv")
+df_18 <- read_csv("01_data/multipleChoiceResponses.csv")
 
 # Construct dataframe
 data <- data.frame("id" = 1:nrow(df_18))
