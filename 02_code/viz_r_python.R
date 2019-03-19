@@ -14,7 +14,7 @@ library(helfRlein)
 library(VennDiagram)
 
 # Read data
-df_18 <- read_csv("/Users/franperic/Projekte/2019/Blog/R_Python/kaggle-survey-2018/multipleChoiceResponses.csv")
+df_18 <- read_csv("~/multipleChoiceResponses.csv")
 
 # Construct dataframe
 data <- data.frame("id" = 1:nrow(df_18))
