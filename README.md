@@ -1,6 +1,6 @@
-# R Python STATWORX Blog
+# R or Python 
 
-**Purpose:** Code for graphics used in the blogpost <link>
+**Purpose:** STATWORX Blog, Code for graphics used in the blogpost <link>
 
 **Methods:** All plots were created with ggplot2 in R
 
