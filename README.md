@@ -4,4 +4,4 @@
 
 **Methods:** All plots were created with ggplot2 in R
 
-**Contact:** If there are any question, shoot me an email.
+**Contact:** If there are any questions, shoot me an email.
