@@ -1,5 +1,7 @@
 # R Python STATWORX Blog
 
 **Purpose:** Code for graphics used in the blogpost <link>
+
 **Methods:** All plots were created with ggplot2 in R
+
 **Contact:** If there are any question, shoot me an email.
