@@ -14,7 +14,7 @@ library(helfRlein)
 library(VennDiagram)
 
 # Read data
-df_18 <- read_csv("/Users/franperic/Projekte/2019/Blog/R_Python/kaggle-survey-2018/multipleChoiceResponses.csv")
+df_18 <- read_csv("01_data/multipleChoiceResponses.csv")
 
 # Construct dataframe
 data <- data.frame("id" = 1:nrow(df_18))
@@ -38,19 +38,18 @@ summary <- data.frame(n = c(1e2, 1e3, 1e4, 1e5, 1e6),
                                  0.12881283, 0.76886075, 6.9458098))
 
 # transform to long layout for ggplot2
-long_summary <- melt(summary, id = c("n"))
-
-ggplot(long_summary,
-       aes(x = n, y = value, col = variable)) +
-  geom_line(size = 1.2, alpha = 0.7) +
-  geom_point(size = 2, alpha = 0.7) +
-  scale_color_manual(name = "Legend", 
-                     values = c("#0085AF", "#00A378"),
-                     labels = c("R", "Python")) +
-  scale_x_log10() +
-  labs(x = "Log Simulation Size",
-       y = "Average Time in s") +
-  theme_minimal(base_size = 16)
+summary %>% 
+  gather(key = "language", value = "time", 2:3) %>%
+    ggplot(aes(x = n, y = time, col = language)) +
+      geom_line(size = 1.2, alpha = 0.7) +
+      geom_point(size = 2, alpha = 0.7) +
+      scale_color_manual(name = "Legend", 
+                         values = c("#0085AF", "#00A378"),
+                         labels = c("R", "Python")) +
+      scale_x_log10() +
+      labs(x = "Log Simulation Size",
+           y = "Average Time in s") +
+      theme_minimal(base_size = 16)
 
 
 #### Survey in the community ---------------------------------------------------
