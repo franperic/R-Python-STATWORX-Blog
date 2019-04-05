@@ -55,24 +55,22 @@ summary %>%
 #### Survey in the community ---------------------------------------------------
 ### R & Python Comparison
 # Calculate the number of users for each language
-order_default_lang <- data %>%
-  filter(!is.na(default_lang)) %>%
+n_users <- data %>%
+  drop_na(default_lang) %>%
   group_by(default_lang) %>%
   summarise(n = n()) %>%
   arrange(n)
 
-order_names_default_lang <- order_default_lang$default_lang
+order_lang <- n_users %>%
+  select(default_lang) %>%
+  as_vector()
 
-# Transform to factor for ordered presentation in plot
-data$default_lang <- factor(data$default_lang,
-                            levels = order_names_default_lang,
-                            ordered = T)
-
-ggplot(order_default_lang,
+ggplot(n_users,
        aes(x = default_lang, y = n)) +
   geom_segment(aes(xend = default_lang, 
                    y = 0, yend = n), show.legend = F) +
   geom_point(col = "steelblue", size = 3) +
+  scale_x_discrete(limits = order_lang) +
   coord_flip() +
   labs(x = "",
        y = "Count") +
@@ -109,37 +107,32 @@ draw.pairwise.venn(area1 = areas$value[1],
 summary_relative_shares <- data %>%
   filter(!is.na(job_title)) %>%
   group_by(job_title) %>%
-  summarise(R_users = sum(default_lang == "R", na.rm = T),
-            Python_users = sum(default_lang == "Python", na.rm = T))
-
-summary_relative_shares_melted <- melt(summary_relative_shares, 
-                                       id = "job_title")
-summary_relative_shares_melted %<>%
+  summarise(R = sum(default_lang == "R", na.rm = T),
+            Python = sum(default_lang == "Python", na.rm = T)) %>%
+  gather(key = Language, value = Users, R:Python) %>%
   group_by(job_title) %>%
-  mutate(n = sum(value),
-         share = value / n) %>%
-  ungroup()
+  mutate(n = sum(Users),
+         share = Users/n,
+         Language = factor(Language, levels = c("R", "Python")))
 
-sorted_relative_shares <- summary_relative_shares_melted %>%
-  filter(variable == "Python_users") %>%
-  arrange(share)
-
-ordered_job_title <- sorted_relative_shares$job_title
-
-summary_relative_shares_melted$job_title <- factor(
-  summary_relative_shares_melted$job_title,
-  levels = ordered_job_title,
-  ordered = T)
+order_job <- summary_relative_shares %>%
+  ungroup() %>%
+  filter(Language == "Python" & n > 50) %>%
+  arrange(share) %>% 
+  select(job_title) %>%
+  as_vector()
 
 # Plot shares
-ggplot(summary_relative_shares_melted %>% filter(n >= 50)) + 
+ggplot(summary_relative_shares %>% 
+         filter(n >= 50)) + 
   aes(x = job_title,
       y = share,
-      fill = variable) +
+      fill = Language) +
   geom_bar(stat = "identity") +
   scale_fill_manual(name = "Legend", 
                     values = c("#0085AF", "#00A378"), 
                     labels = c("R", "Python")) +
+  scale_x_discrete(limits = order_job) +
   coord_flip() +
   labs(x = "Job Title",
        y = "Share") +
@@ -162,7 +155,8 @@ ggplot(summary_relative_shares_melted %>% filter(n >= 50)) +
 
 #### Recommendations -----------------------------------------------------------
 # Barplot for recommendations
-ggplot(data %>% filter(Recommendation %in% c("Python", "R"))) +
+ggplot(data %>% 
+         filter(Recommendation %in% c("Python", "R"))) +
   geom_bar(aes(x = Recommendation, 
         fill = Recommendation), 
     show.legend = F,
