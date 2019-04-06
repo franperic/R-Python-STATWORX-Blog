@@ -2,6 +2,6 @@
 
 **Purpose:** STATWORX Blog, Code for graphics used in the blogpost <link>
 
-**Methods:** All plots were created with ggplot2 in R
+**Methods:** The packages ggplot2 and VennDiagram were used for the plots.
 
 **Contact:** If there are any questions, shoot me an email.
