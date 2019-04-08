@@ -8,7 +8,6 @@
 rm(list = ls())
 options(scipen = 999)
 library(readr)
-library(reshape2)
 library(tidyverse)
 library(helfRlein)
 library(VennDiagram)
