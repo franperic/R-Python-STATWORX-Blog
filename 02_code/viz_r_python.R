@@ -7,7 +7,6 @@
 # Setup
 rm(list = ls())
 options(scipen = 999)
-library(readr)
 library(tidyverse)
 library(helfRlein)
 library(VennDiagram)
